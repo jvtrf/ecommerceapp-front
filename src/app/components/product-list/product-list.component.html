@@ -1,3 +1,16 @@
-<p *ngFor="let product of products">
-  {{ product.name }}: {{product.unitPrice | currency:'USD'}}
-</p>
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <div class="row">
+        <div *ngFor="let product of products" class="col-md-3">
+          <div class="product-box">
+            <img src="{{ product.imageUrl}}">
+            <h1>{{ product.name }}</h1>
+            <div class="price">{{ product.unitPrice | currency:'USD'}}</div>
+            <a href="#" class="primary-btn">Add to cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
