@@ -1,0 +1,52 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <div *ngIf="cartItems.length > 0">
+        <table class="table table-bordered">
+          <tr>
+            <th width="20%" class="">Product Image</th>
+            <th width="50%" class="">Product Detail</th>
+            <th width="30%" class=""></th>
+          </tr>
+          <tr *ngFor="let cartItem of cartItems">
+            <td> <img src="{{ cartItem.imageUrl }}" class="img-responsive" width="150px"></td>
+            <td>
+              <p>{{ cartItem.name }}</p>
+              <p>{{ cartItem.unitPrice | currency: 'USD' }}</p>
+            </td>
+            <td>
+              <div class="items">
+                <label>Quantity:</label>
+                <div class="row no-gutters">
+                  <div class="col">
+                    <button (click)="incrementQuantity(cartItem)" class="btn btn-primary btn-sm"><i
+                        class="fas fa-plus"></i></button>
+                  </div>
+                  <div class="col ml-4 mr-2">
+                    {{ cartItem.quantity }}
+                  </div>
+                  <div class="col">
+                    <button (click)="decrementQuantity(cartItem)" class="btn btn-primary btn-sm"><i
+                        class="fas fa-minus"></i></button>
+                  </div>
+                  <div class="col-8"></div>
+                </div>
+                <button class="btn btn-primary btn-sm mt-2" (click)="remove(cartItem)">Remove</button>
+              </div>
+              <p class="mt-2">Subtotal: {{ cartItem.quantity*cartItem.unitPrice | currency: 'USD' }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td style="font-weight: bold;">
+              <p>Shipping: FREE </p>
+              <p>Total Price: {{ totalPrice | currency: 'USD' }}</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="cartItems.length == 0" class="alert alert-warning col-md-12">Your shopping cart is empty.</div>
+    </div>
+  </div>
+
+</div>

@@ -1053,4 +1053,8 @@ footer ul li {
     border: 0;
     padding: 8px 0;
   }
+
+  .table-bordered {
+    border: 1px solid #ddd !important;
+  }
 }
