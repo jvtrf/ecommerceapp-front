@@ -43,9 +43,30 @@
             <div class="col-md-2"><label for="">Country</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="country">
-                  <option>TO DO</option>
+                <select formControlName="country" (change)="listStates('shippingAddress')">
+                  <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label for="">State</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="state">
+                  <option *ngFor="let state of shippingStates" [ngValue]="state">{{ state.name }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-2"><label for="">City</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input type="text" formControlName="city">
               </div>
             </div>
           </div>
@@ -59,25 +80,6 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-2"><label for="">City</label></div>
-            <div class="col-md-9">
-              <div class="input-space">
-                <input type="text" formControlName="city">
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-2"><label for="">State</label></div>
-            <div class="col-md-9">
-              <div class="input-space">
-                <select formControlName="state">
-                  <option>TO DO</option>
-                </select>
-              </div>
-            </div>
-          </div>
 
           <div class="row">
             <div class="col-md-2"><label for="">Zip Code</label></div>
@@ -105,18 +107,20 @@
             <div class="col-md-2"><label for="">Country</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="country">
-                  <option>TO DO</option>
+                <select formControlName="country" (change)="listStates('billingAddress')">
+                  <option *ngFor=" let country of countries" [ngValue]="country">{{ country.name }}</option>
                 </select>
               </div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col-md-2"><label for="">Street</label></div>
+            <div class="col-md-2"><label for="">State</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input type="text" formControlName="street">
+                <select formControlName="state">
+                  <option *ngFor="let state of billingStates" [ngValue]="state">{{ state.name }}</option>
+                </select>
               </div>
             </div>
           </div>
@@ -131,12 +135,10 @@
           </div>
 
           <div class="row">
-            <div class="col-md-2"><label for="">State</label></div>
+            <div class="col-md-2"><label for="">Street</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <select formControlName="state">
-                  <option>TO DO</option>
-                </select>
+                <input type="text" formControlName="street">
               </div>
             </div>
           </div>
@@ -190,34 +192,32 @@
 
           <div class="row">
             <div class="col-md-2"><label for="">Security Code</label></div>
-            <div class="col-md-9">
+            <div class="col-md-2">
               <div class="input-space">
                 <input type="text" formControlName="securityCode">
               </div>
             </div>
-          </div>
 
-          <div class="row">
-            <div class="col-md-2"><label for="">Expiration Month</label></div>
-            <div class="col-md-9">
+            <div class="col-md-2"><label for="" class="align-middle">Expiration</label></div>
+            <div class="col-md-2">
               <div class="input-space">
-                <select formControlName="expirationMonth">
-                  <option>TODO</option>
+                <select formControlName="expirationMonth" class="text-center">
+                  <option *ngFor="let month of cardMonths">{{ month }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="input-space">
+                <select formControlName="expirationYear" (change)="handleMonthsAndYears()" class="text-center">
+                  <option *ngFor="let year of cardYears">{{ year }}</option>
                 </select>
               </div>
             </div>
           </div>
+        </div>
 
-          <div class="row">
-            <div class="col-md-2"><label for="">Expiration Year</label></div>
-            <div class="col-md-9">
-              <div class="input-space">
-                <select formControlName="expirationYear">
-                  <option>TODO</option>
-                </select>
-              </div>
-            </div>
-          </div>
+        <div class="row">
+
 
         </div>
 
