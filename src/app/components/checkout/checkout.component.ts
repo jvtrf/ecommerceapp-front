@@ -5,8 +5,10 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
+import { CartService } from 'src/app/services/cart.service';
 import { ShopFormService } from 'src/app/services/shop-form.service';
 import { ShopValidators } from 'src/app/validators/shop-validators';
 
@@ -31,7 +33,8 @@ export class CheckoutComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private shopFormService: ShopFormService
+    private shopFormService: ShopFormService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -120,6 +123,10 @@ export class CheckoutComponent implements OnInit {
       .subscribe((data) => (this.cardYears = data));
 
     this.listCountries();
+
+    this.cartService.totalPrice.subscribe(
+      (totalPriceData) => (this.totalPrice = totalPriceData)
+    );
   }
 
   // ############################ Controls Getters & Setters ###############################

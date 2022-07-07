@@ -396,7 +396,7 @@
         <div class="form-area">
           <h3>Review Your Order</h3>
           <p>Shipping: FREE</p>
-          <p>Total Price: {{ totalPrice }}</p>
+          <p>Total Price: {{ totalPrice | currency: 'USD' }}</p>
         </div>
 
         <div class="text-center">
