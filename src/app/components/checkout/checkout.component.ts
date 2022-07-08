@@ -5,10 +5,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Router } from '@angular/router';
 import { Country } from 'src/app/common/country';
+import { Order } from 'src/app/common/order';
+import { OrderItem } from 'src/app/common/order-item';
+import { Purchase } from 'src/app/common/purchase';
 import { State } from 'src/app/common/state';
 import { CartService } from 'src/app/services/cart.service';
+import { CheckoutService } from 'src/app/services/checkout.service';
 import { ShopFormService } from 'src/app/services/shop-form.service';
 import { ShopValidators } from 'src/app/validators/shop-validators';
 
@@ -34,7 +38,9 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private shopFormService: ShopFormService,
-    private cartService: CartService
+    private cartService: CartService,
+    private checkoutService: CheckoutService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -127,6 +133,9 @@ export class CheckoutComponent implements OnInit {
     this.cartService.totalPrice.subscribe(
       (totalPriceData) => (this.totalPrice = totalPriceData)
     );
+    this.cartService.totalQuantity.subscribe(
+      (totalQuantityData) => (this.totalQuantity = totalQuantityData)
+    );
   }
 
   // ############################ Controls Getters & Setters ###############################
@@ -209,6 +218,7 @@ export class CheckoutComponent implements OnInit {
       .subscribe((data) => (this.countries = data));
   }
 
+  // ############################ Events ###############################
   listStates(formGroupName: string) {
     const formGroup = this.checkoutFormGroup.get(formGroupName);
 
@@ -221,12 +231,6 @@ export class CheckoutComponent implements OnInit {
       }
       formGroup.get('state').setValue(data[0]);
     });
-  }
-
-  onSubmit() {
-    if (this.checkoutFormGroup.invalid) {
-      this.checkoutFormGroup.markAllAsTouched();
-    }
   }
 
   handleMonthsAndYears() {
@@ -248,5 +252,65 @@ export class CheckoutComponent implements OnInit {
     this.shopFormService
       .getCardMonths(startMonth)
       .subscribe((data) => (this.cardMonths = data));
+  }
+
+  onSubmit() {
+    if (this.checkoutFormGroup.invalid) {
+      this.checkoutFormGroup.markAllAsTouched();
+      return;
+    }
+
+    let order = new Order();
+    order.totalPrice = this.totalPrice;
+    order.totalQuantity = this.totalQuantity;
+
+    const cartItems = this.cartService.cartItems;
+
+    let orderItems: OrderItem[] = cartItems.map(
+      (cartItem) => new OrderItem(cartItem)
+    );
+
+    let purchase = new Purchase();
+
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+
+    purchase.shippingAddress =
+      this.checkoutFormGroup.controls['shippingAddress'].value;
+    purchase.shippingAddress.state = JSON.parse(
+      JSON.stringify(purchase.shippingAddress.state)
+    ).name;
+    purchase.shippingAddress.country = JSON.parse(
+      JSON.stringify(purchase.shippingAddress.country)
+    ).name;
+
+    purchase.billingAddress =
+      this.checkoutFormGroup.controls['shippingAddress'].value;
+    purchase.billingAddress.state = JSON.parse(
+      JSON.stringify(purchase.billingAddress.state)
+    ).name;
+    purchase.billingAddress.country = JSON.parse(
+      JSON.stringify(purchase.billingAddress.country)
+    ).name;
+
+    purchase.orderItems = orderItems;
+
+    this.checkoutService.placeOrder(purchase).subscribe({
+      next: (response) => {
+        alert(`Your order has been received.`);
+        this.resetCart();
+      },
+      error: (err) => {
+        alert(`There was an error: ${err.message}`);
+      },
+    });
+  }
+  resetCart() {
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+
+    this.checkoutFormGroup.reset();
+
+    this.router.navigateByUrl('/products');
   }
 }
