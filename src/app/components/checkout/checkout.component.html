@@ -209,9 +209,9 @@
                   <option *ngFor="let state of billingStates" [ngValue]="state">{{ state.name }}</option>
                 </select>
 
-                <div *ngIf="billingAddressState.invalid && (shippingAddressState.dirty || shippingAddressState.touched)"
+                <div *ngIf="billingAddressState.invalid && (billingAddressState.dirty || billingAddressState.touched)"
                   class="alert alert-danger mt-1">
-                  <div *ngIf="shippingAddressState.errors.required || shippingAddressState.errors.notOnlyWhiteSpace">
+                  <div *ngIf="billingAddressState.errors.required || billingAddressState.errors.notOnlyWhiteSpace">
                     State is required!
                   </div>
                 </div>

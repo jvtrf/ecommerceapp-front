@@ -272,19 +272,21 @@ export class CheckoutComponent implements OnInit {
 
     let purchase = new Purchase();
 
+    purchase.order = order;
+
     purchase.customer = this.checkoutFormGroup.controls['customer'].value;
 
     purchase.shippingAddress =
       this.checkoutFormGroup.controls['shippingAddress'].value;
-    purchase.shippingAddress.state = JSON.parse(
-      JSON.stringify(purchase.shippingAddress.state)
-    ).name;
     purchase.shippingAddress.country = JSON.parse(
       JSON.stringify(purchase.shippingAddress.country)
     ).name;
+    purchase.shippingAddress.state = JSON.parse(
+      JSON.stringify(purchase.shippingAddress.state)
+    ).name;
 
     purchase.billingAddress =
-      this.checkoutFormGroup.controls['shippingAddress'].value;
+      this.checkoutFormGroup.controls['billingAddress'].value;
     purchase.billingAddress.state = JSON.parse(
       JSON.stringify(purchase.billingAddress.state)
     ).name;
@@ -293,6 +295,7 @@ export class CheckoutComponent implements OnInit {
     ).name;
 
     purchase.orderItems = orderItems;
+    console.log(purchase);
 
     this.checkoutService.placeOrder(purchase).subscribe({
       next: (response) => {
