@@ -12,7 +12,16 @@ export class CartService {
 
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
-  constructor() {}
+  storage: Storage = localStorage;
+
+  constructor() {
+    let data = JSON.parse(this.storage.getItem('cartItems'));
+
+    if (data != null) {
+      this.cartItems = data;
+      this.computeCartTotal();
+    }
+  }
 
   addToCart(newCartItem: CartItem) {
     let existsInCart: boolean = false;
@@ -51,6 +60,7 @@ export class CartService {
 
     if (itemIndex > -1) {
       this.cartItems.splice(itemIndex, 1);
+      this.computeCartTotal();
     }
   }
 
@@ -65,5 +75,11 @@ export class CartService {
 
     this.totalPrice.next(totalPriceValue);
     this.totalQuantity.next(totalQuantityValue);
+
+    this.persistCartItems();
+  }
+
+  persistCartItems() {
+    this.storage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
 }
