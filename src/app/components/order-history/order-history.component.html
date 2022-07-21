@@ -1,0 +1,26 @@
+<div class="main-content">
+  <div align="center" class="alert alert-warning-col-md-12" role="alert">
+    <h3>Your orders</h3>
+  </div>
+  <div *ngIf="orderHistoryList.length > 0">
+    <table class="table table-bordered">
+      <tr>
+        <th>Order Tracking Number</th>
+        <th>Total Price</th>
+        <th>Total Quantity</th>
+        <th>Date</th>
+      </tr>
+      <tr *ngFor="let orderHistory of orderHistoryList">
+        <td>{{ orderHistory.orderTrackingNumber }}</td>
+        <td>{{ orderHistory.totalPrice | currency: 'USD' }}</td>
+        <td>{{ orderHistory.totalQuantity }}</td>
+        <td>{{ orderHistory.dateCreated | date: 'short' }}</td>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="orderHistoryList.length == 0">
+    <div align="center" class="alert alert-warning col-md-12" role="alert">
+      No orders found.
+    </div>
+  </div>
+</div>
